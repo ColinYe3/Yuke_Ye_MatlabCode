@@ -1,0 +1,167 @@
+% Constants
+a = 15; %(Torr.cm)^-1   
+b = 365; %V.(Torr.cm)^-1
+gamma = 0.01; %(need to Change for different samples)
+
+% Generate pd values from 0.33 pa m to 100 pa m   (before) 
+% Generate pd values from 3 pa cm to 22.5 pa cm   (Changed)
+% The range of pd
+pd = linspace(0.33, 100, 10000); 
+
+% Calculate breakdown voltage Vb using Paschen's law
+Vb = (b .* pd) ./ log((a .* pd) ./ log(1 + 1 ./ gamma));
+
+% Plot the Paschen's Curve
+figure;
+plot(pd, Vb, 'linewidth', 2); 
+xlabel('pd (atm*m)');
+ylabel('Breakdown Voltage Vb (V)');
+title('Paschen%s Curve for Air');
+grid on;
+
+% Find and display the minimum Vb value in the Paschen's Curve
+[minVb, idx] = min(Vb);
+text(pd(idx), minVb, sprintf('Min: %.2f V', minVb), 'VerticalAlignment', 'top');
+
+
+
+%partial discharge modeling of cablesystem
+%initial value
+td = 225e-6; %insulationthickness the unit is m  (need to Change for different samples)
+T= 20; %Variable
+P = 100000*293/(273+T);%*293/(273+T); %atm The presure in different temperature  101325*293/(273+T)   
+%presure 1mbar=100pa
+permittivity = 2.1;
+d = linspace(55e-6, 222e-6, 10000);  %the airgap size from 3um to 1mm   Changed
+pd = P * d;
+
+
+%calculate Vb for airgap size
+Vb = (b .* pd) ./ log((a .* pd) ./ log(1 + 1 ./ gamma));%the formula of Vb
+%calculate percentage of voltage in airgap
+percentage_voltage = 1 ./ (1 + (td ./(permittivity .*d)));%the formula of percentage voltage
+%calculate voltage we could apply to cable without sparks
+Vuse = Vb ./ percentage_voltage;%The formula of PDIV
+min(Vuse)%Show PDIV value 
+
+
+
+%Example value
+%%%%%%%%%%the data of PDIV with gamma=0.01(sintered PTFE)%%%%%%%%%%%%
+%The value of PDIV on 20°c
+%temp1 = 20;
+%PDIV1 = 1.4342e+03;
+%The value of PDIV on 90°c
+%temp2= 90;
+%PDIV2 = 1.2620e+03;
+%The value of PDIV on 110°c
+%temp3 = 110;
+%PDIV3 = 1.2231e+03;
+%The value of PDIV on 130°c
+%temp4 = 130;
+%PDIV4 = 1.1876e+03;
+%The value of PDIV on 150°c
+%temp5 = 150;
+%PDIV5 = 1.1551e+03;
+%The value of PDIV on 180°c
+%temp6 = 180;
+%PDIV6 = 1.1110e+03;
+%The value of PDIV on 200°c
+%temp7 = 200;
+%PDIV7 = 1.0844e+03;
+
+%%%%%%%%%%the data of PDIV with gamma=0.01(PI)%%%%%%%%%%%%
+%The value of PDIV on 20°c
+%temp1 = 20;
+%PDIV1 = 622.7981;
+%The value of PDIV on 90°c
+%temp2= 90;
+%PDIV2 = 554.5683;
+%The value of PDIV on 110°c
+%temp3 = 110;
+%PDIV3 = 539.5462;
+%The value of PDIV on 130°c
+%temp4 = 130;
+%PDIV4 = 526.0073;
+%The value of PDIV on 150°c
+%temp5 = 150;
+%PDIV5 = 513.7575;
+%The value of PDIV on 180°c
+%temp6 = 180;
+%PDIV6 = 497.4564;
+%The value of PDIV on 200°c
+%temp7 = 200;
+%PDIV7 = 487.7843;
+
+
+%%%%%%%%%%%%%%%%the data of PDIV with estimated gamma at 20℃(sintered PTFE)%%%%%%%%%%%%
+%The value of PDIV on 20°c
+%temp1 = 20;
+%PDIV1 = 2.2211e+03;
+%The value of PDIV on 90°c
+%temp2= 90;
+%PDIV2 = 1.9938e+03;
+%The value of PDIV on 110°c
+%temp3 = 110;
+%PDIV3 = 1.9424e+03;
+%The value of PDIV on 130°c
+%temp4 = 130;
+%PDIV4 = 1.8955e+03;
+%The value of PDIV on 150°c
+%temp5 = 150;
+%PDIV5 = 1.8525e+03;
+%The value of PDIV on 180°c
+%temp6 = 180;
+%PDIV6 = 1.7943e+03;
+%The value of PDIV on 200°c
+%temp7 = 200;
+%PDIV7 = 1.7591e+03;
+
+%%%%%%%%%%%%%%%%the data of PDIV with estimated gamma at 20℃(PI)%%%%%%%%%%%%
+%The value of PDIV on 20°c
+%temp1 = 20;
+%PDIV1 = 780.9665;
+%The value of PDIV on 90°c
+%temp2= 90;
+%PDIV2 = 714.1218;
+%The value of PDIV on 110°c
+%temp3 = 110;
+%PDIV3 = 700.1189;
+%The value of PDIV on 130°c
+%temp4 = 130;
+%PDIV4 = 687.8353;
+%The value of PDIV on 150°c
+%temp5 = 150;
+%PDIV5 = 677.0626;
+%The value of PDIV on 180°c
+%temp6 = 180;
+%PDIV6 = 663.3697;
+%The value of PDIV on 200°c
+%temp7 = 200;
+%PDIV7 = 655.6872;
+
+
+%The Value of PDIV with gamma=0.01(sintered PTFE)
+%temp = [20, 90, 110, 130, 150, 180, 200];
+%PDIV = [1.4342e+03, 1.2620e+03, 1.2231e+03, 1.1876e+03, 1.1551e+03, 1.1110e+03, 1.0844e+03];
+
+%The Value of PDIV with gamma=0.01(sintered PTFE)
+%temp = [20, 90, 110, 130, 150, 180, 200];
+%PDIV = [622.7981, 554.5683, 539.5462, 526.0073, 513.7575, 497.4564, 487.7843];
+
+%The Value of PDIV with estimated gamma at 20℃(sintered PTFE)
+%temp = [20, 90, 110, 130, 150, 180, 200];
+%PDIV = [2.2211e+03, 1.9938e+03, 1.9424e+03, 1.8955e+03, 1.8525e+03, 1.7943e+03, 1.7591e+03];
+
+%The Value of PDIV with estimated gamma at 20℃(PI)
+%temp = [20, 90, 110, 130, 150, 180, 200];
+%PDIV = [780.9665, 714.1218, 700.1189, 687.8353, 677.0626, 663.3697, 655.6872];
+%The end of the example value
+
+
+%plot the graph of PDIV and Temperature
+plot(temp, PDIV, '-^')
+xlabel('Temperature(°c)')
+ylabel('PDIV(Vpeak)')
+title('Measured PDIV for PI versus temperature')
+grid on
